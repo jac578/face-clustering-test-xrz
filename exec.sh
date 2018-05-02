@@ -1,0 +1,1 @@
+python cluster_test.py --method DBSCAN --videoDir /workspace/data/blue/feature/data_blue_feature --picDir /workspace/data/blue/crop_faces --saveResult True --saveDir result
