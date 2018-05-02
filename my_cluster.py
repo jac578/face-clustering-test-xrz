@@ -92,7 +92,7 @@ def __compute_pairwise_distance(face_feature_list):
     dist_matrix = 1 - np.dot(face_feature_list, face_feature_list.T)
     return dist_matrix
 
-def my_cluster(videoDir, picDir, method, saveResult=False, **kwargs):
+def my_cluster(videoDir, picDir, method, saveResult=False, saveDir='result', **kwargs):
 
     resultDict = {}
 
@@ -106,7 +106,8 @@ def my_cluster(videoDir, picDir, method, saveResult=False, **kwargs):
     else:
         y_pred = cluster_face_features(feature_list=feature_list, method=method)
     if saveResult:
-        saveDirPrefix = 'result_' + method + videoDir.replace('./', '')
+        #saveDirPrefix = 'result_' + method + videoDir.replace('./', '')
+        saveDirPrefix = saveDir
         for i in range(len(y_pred)):
             classDir = saveDirPrefix+'/'+str(y_pred[i])+'/'
             try:
@@ -119,21 +120,21 @@ def my_cluster(videoDir, picDir, method, saveResult=False, **kwargs):
             picPath = os.path.join(picDir, picName)
             
             shutil.copyfile(picPath, classDir+picName)
-        shutil.copytree(saveDirPrefix, os.path.join(videoDir, saveDirPrefix))
+        #shutil.copytree(saveDirPrefix, os.path.join(videoDir, saveDirPrefix))
 
     assert len(y_pred) == len(filePathList)
     for i in range(len(y_pred)):
         resultDict[filePathList[i].split('/')[-1].replace('.npy', '')] = y_pred[i]
     return resultDict
 
-def cluster_from_video_dir(videoDir, picDir, methodList=['DBSCAN'], saveResult=False):
+def cluster_from_video_dir(videoDir, picDir, methodList=['DBSCAN'], saveResult=False, saveDir='result'):
     methodResultDict = {}
     for method in methodList:
         t0 = time.time()
         print "method: " + method
         print "start time: ", t0
         
-        methodResultDict[method] = my_cluster(videoDir, picDir, method, saveResult)
+        methodResultDict[method] = my_cluster(videoDir, picDir, method, saveResult, saveDir)
         t1 = time.time()
         print "end time: ", t1
         print "time cost: ", t1-t0
