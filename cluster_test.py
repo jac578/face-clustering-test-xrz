@@ -156,7 +156,7 @@ def compute_combination(upNum, downNum):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser('Clustering and Pairwise F_score Evaluation')
     parser.add_argument('--method', type=str, required=True, help='DBSCAN, API, AP, RankOrder')
-    parser.add_argument('--labelDir', type=str, required=True, default='test_set', help='Path of labeled pictures')
+    parser.add_argument('--labelDir', type=str, required=False, default='test_set', help='Path of labeled pictures')
     parser.add_argument('--videoDir', type=str, required=True, help='Path of features to be clustered')
     parser.add_argument('--picDir', type=str, required=True, help='Path of pictures to be clustered')
     parser.add_argument('--saveResult', type=bool, required=True, help='Whether to save the result pics')
