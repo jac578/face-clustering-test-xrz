@@ -114,7 +114,9 @@ def my_cluster(videoDir, picDir, method, saveResult=False, **kwargs):
             except:
                 pass
             picName = filePathList[i].replace('.npy', '.jpg').split('/')[-1]
-            picPath = picDir + picName
+            if picName.startswith('/'):
+                picName = picName[1:]
+            picPath = os.path.join(picDir, picName)
             
             shutil.copyfile(picPath, classDir+picName)
         shutil.copytree(saveDirPrefix, os.path.join(videoDir, saveDirPrefix))
