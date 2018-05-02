@@ -48,7 +48,7 @@ def feature_data_reader(dataPath):
                 
     return np.asarray(feature_list), global_pic, filePathList 
 
-def cluster_face_features(feature_list, method=None, precomputed=True):
+def cluster_face_features(feature_list, method=None, precomputed=True, eps=0.5):
     if feature_list is not None:
         face_feature_list = feature_list
 
@@ -70,7 +70,7 @@ def cluster_face_features(feature_list, method=None, precomputed=True):
         if precomputed:
             dist_matrix = -dist_matrix
     elif method == 'DBSCAN':
-        cluster_estimator = cluster.DBSCAN(metric=metric_type, eps=.4, min_samples=2)
+        cluster_estimator = cluster.DBSCAN(metric=metric_type, eps=eps, min_samples=2)
 
     t0 = time.time()
     cluster_estimator.fit(dist_matrix)
@@ -92,7 +92,7 @@ def __compute_pairwise_distance(face_feature_list):
     dist_matrix = 1 - np.dot(face_feature_list, face_feature_list.T)
     return dist_matrix
 
-def my_cluster(videoDir, picDir, method, saveResult=False, saveDir='result', **kwargs):
+def my_cluster(videoDir, picDir, method, saveResult=False, saveDir='result', eps=0.5, **kwargs):
 
     resultDict = {}
 
@@ -104,7 +104,7 @@ def my_cluster(videoDir, picDir, method, saveResult=False, saveDir='result', **k
             print 'in else'
             y_pred = rankOrder_cluster_format(feature_list)
     else:
-        y_pred = cluster_face_features(feature_list=feature_list, method=method)
+        y_pred = cluster_face_features(feature_list=feature_list, method=method, eps=eps)
         print y_pred.shape
         np.set_printoptions(threshold=np.inf)
         print y_pred #to delete
@@ -130,14 +130,14 @@ def my_cluster(videoDir, picDir, method, saveResult=False, saveDir='result', **k
         resultDict[filePathList[i].split('/')[-1].replace('.npy', '')] = y_pred[i]
     return resultDict
 
-def cluster_from_video_dir(videoDir, picDir, methodList=['DBSCAN'], saveResult=False, saveDir='result'):
+def cluster_from_video_dir(videoDir, picDir, methodList=['DBSCAN'], saveResult=False, saveDir='result', eps=0.5):
     methodResultDict = {}
     for method in methodList:
         t0 = time.time()
         print "method: " + method
         print "start time: ", t0
         
-        methodResultDict[method] = my_cluster(videoDir, picDir, method, saveResult, saveDir)
+        methodResultDict[method] = my_cluster(videoDir, picDir, method, saveResult, saveDir, eps)
         t1 = time.time()
         print "end time: ", t1
         print "time cost: ", t1-t0
