@@ -113,7 +113,7 @@ def my_cluster(videoDir, picDir, method, saveResult=False, **kwargs):
                 os.makedirs(classDir)
             except:
                 pass
-            picName = filePathList[i].replace('.npy', '').split('/')[-1]
+            picName = filePathList[i].replace('.npy', '.jpg').split('/')[-1]
             picPath = picDir + picName
             
             shutil.copyfile(picPath, classDir+picName)
