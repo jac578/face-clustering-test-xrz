@@ -70,7 +70,7 @@ def cluster_face_features(feature_list, method=None, precomputed=True):
         if precomputed:
             dist_matrix = -dist_matrix
     elif method == 'DBSCAN':
-        cluster_estimator = cluster.DBSCAN(metric=metric_type, eps=.2, min_samples=2)
+        cluster_estimator = cluster.DBSCAN(metric=metric_type, eps=.3, min_samples=2)
 
     t0 = time.time()
     cluster_estimator.fit(dist_matrix)
