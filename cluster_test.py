@@ -163,7 +163,7 @@ if __name__ == '__main__':
     args = vars(parser.parse_args())
 
 
-    labelDict = load_label(args['labelDir'])
+    #labelDict = load_label(args['labelDir'])
     #f_score = cluster_and_test_from_video_dir('5ab52c0e28734100076d67b9', labelDict, methodList=['API'])
     #f_score = cluster_and_test_from_video_dir(args['videoDir'], args['picDir'], labelDict, methodList=[args['method']])
     #print f_score
