@@ -33,23 +33,6 @@ def cluster_and_test_from_video_dir(videoDir, picDir, labelDict, methodList=['DB
         resultClusterDict = make_clusterDict_from_resultDict(resultDict)
         labelClusterDict = make_clusterDict_from_resultDict(labelDict)
         
-        '''
-        #calculate precision
-        clusterPrecision = 0
-        for key in resultClusterDict.keys():
-            mostLabel, mostLabelNum = find_cluster_most_label(resultClusterDict[key], labelDict)
-            currentClusterPrecision = mostLabelNum / len(resultClusterDict[key])
-            clusterPrecision += currentClusterPrecision
-        clusterPrecision = clusterPrecision / len(resultClusterDict)
-        
-        #calculate recall
-        recallDict = {}
-        for k,v in labelClusterDict.items():
-            maxClusteredNum = find_max_clustered_num(k, resultClusterDict, labelDict)
-            recallDict[k] = maxClusteredNum / len(labelClusterDict[k])
-        
-        return clusterPrecision, recallDict
-        '''
         f_score = pairwise_f_score(resultClusterDict, labelClusterDict, labelDict)
         return f_score
 

@@ -105,9 +105,6 @@ def my_cluster(videoDir, picDir, method, saveResult=False, saveDir='result', eps
             y_pred = rankOrder_cluster_format(feature_list)
     else:
         y_pred = cluster_face_features(feature_list=feature_list, method=method, eps=eps)
-        print y_pred.shape
-        np.set_printoptions(threshold=np.inf)
-        print y_pred #to delete
     if saveResult:
         #saveDirPrefix = 'result_' + method + videoDir.replace('./', '')
         saveDirPrefix = saveDir
