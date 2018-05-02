@@ -92,7 +92,7 @@ def __compute_pairwise_distance(face_feature_list):
     dist_matrix = 1 - np.dot(face_feature_list, face_feature_list.T)
     return dist_matrix
 
-def my_cluster(videoDir, method, saveResult=False, **kwargs):
+def my_cluster(videoDir, picDir, method, saveResult=False, **kwargs):
 
     resultDict = {}
 
@@ -124,14 +124,14 @@ def my_cluster(videoDir, method, saveResult=False, **kwargs):
         resultDict[filePathList[i].split('/')[-1].replace('.npy', '')] = y_pred[i]
     return resultDict
 
-def cluster_from_video_dir(videoDir, methodList=['DBSCAN']):
+def cluster_from_video_dir(videoDir, picDir, methodList=['DBSCAN'], saveResult=False):
     methodResultDict = {}
     for method in methodList:
         t0 = time.time()
         print "method: " + method
         print "start time: ", t0
         
-        methodResultDict[method] = my_cluster(videoDir, method)
+        methodResultDict[method] = my_cluster(videoDir, picDir, method, saveResult)
         t1 = time.time()
         print "end time: ", t1
         print "time cost: ", t1-t0
@@ -146,7 +146,7 @@ def download_json(httpLink):
 def cluster_from_httpLink(httpLink):
     jsonFile = download_json(httpLink)
     videoDir = convert_json_file_to_npy(jsonFile)
-    cluster_from_video_dir(videoDir=videoDir)
+    #cluster_from_video_dir(videoDir=videoDir)
 
 def cluster_from_httpLinkList(httpLinkList):
     for httpLink in httpLinkList:
@@ -159,6 +159,6 @@ if __name__ == "__main__":
                     #'http://100.100.62.235:8000/v1/videos/5aba6da94d7eac000761173a/faces',
                     ]
     #cluster_from_httpLinkList(httpLinkList)
-    cluster_from_video_dir(videoDir='5ab52c0e28734100076d67b9', methodList=['DBSCAN'])
+    #cluster_from_video_dir(videoDir='5ab52c0e28734100076d67b9', methodList=['DBSCAN'])
 
 

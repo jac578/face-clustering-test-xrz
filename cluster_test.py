@@ -22,12 +22,12 @@ def load_label(testsetDir):
                         alone_cluster_label_cnt += 1
     return labelDict
 
-def cluster_and_test_from_video_dir(videoDir, labelDict, methodList=['DBSCAN']):
+def cluster_and_test_from_video_dir(videoDir, picDir, labelDict, methodList=['DBSCAN']):
     if methodList[0] == 'API':
         methodResultDict = {}
         methodResultDict['API'] = test_former_api(videoDir)
     else:    
-        methodResultDict = cluster_from_video_dir(videoDir, methodList=methodList)
+        methodResultDict = cluster_from_video_dir(videoDir, picDir, methodList)
     for method in methodResultDict.keys():
         resultDict = methodResultDict[method]
         resultClusterDict = make_clusterDict_from_resultDict(resultDict)
@@ -157,14 +157,18 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser('Clustering and Pairwise F_score Evaluation')
     parser.add_argument('--method', type=str, required=True, help='DBSCAN, API, AP, RankOrder')
     parser.add_argument('--labelDir', type=str, required=True, default='test_set', help='Path of labeled pictures')
-    parser.add_argument('--videoDir', type=str, required=True, help='Path of pictures to be clustered')
+    parser.add_argument('--videoDir', type=str, required=True, help='Path of features to be clustered')
+    parser.add_argument('--picDir', type=str, required=True, help='Path of pictures to be clustered')
+    parser.add_argument('--saveResult', type=bool, required=True, help='Whether to save the result pics')
     args = vars(parser.parse_args())
 
 
     labelDict = load_label(args['labelDir'])
     #f_score = cluster_and_test_from_video_dir('5ab52c0e28734100076d67b9', labelDict, methodList=['API'])
-    f_score = cluster_and_test_from_video_dir(args['videoDir'], labelDict, methodList=[args['method']])
-    print f_score
+    #f_score = cluster_and_test_from_video_dir(args['videoDir'], args['picDir'], labelDict, methodList=[args['method']])
+    #print f_score
+
+    cluster_from_video_dir(args['videoDir'], args['picDir'], methodList=[args['method']], saveResult=args['saveResult'])
 
     '''
     clusterPrecision, recallDict = cluster_and_test_from_video_dir('5ab52c0e28734100076d67b9', labelDict, methodList=['DBSCAN'])
