@@ -49,6 +49,7 @@ def feature_data_reader_fromList(filePathList):
     name = multiprocessing.current_process().name
     #Use first one to initialize
     feature_list = np.load(filePathList[0])
+    assert feature_list.shape[1] > 0
     #Concat else
     cnt = -1
     noHeadFilePathList = filePathList[1:]
@@ -64,6 +65,7 @@ def feature_data_reader_fromList(filePathList):
             cnt -= 1
             print feature_list.shape, featureVec.shape, fileFullPath
     newFilePathList = [filePathList[0]] + noHeadFilePathList
+    print feature_list.shape[0], len(newFilePathList), "Process", name
     return np.asarray(feature_list), newFilePathList
 
 def multiprocess_feature_data_reader(dataPath, featureList, nProcess=1):
