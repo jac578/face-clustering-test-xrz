@@ -64,6 +64,7 @@ def feature_data_reader_fromList(filePathList):
         if featureVec.shape[0] == 512:
             feature_list = np.vstack((feature_list, featureVec))
         else:
+            print 'in', "Process", name
             print feature_list.shape[0], len(noHeadFilePathList), "Process", name
             noHeadFilePathList.pop(cnt)
             print feature_list.shape[0], len(noHeadFilePathList), "Process", name
