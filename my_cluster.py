@@ -14,38 +14,27 @@ from parse_json import convert_json_file_to_npy
 from demo_noLFW import rankOrder_cluster_format
 
 
-def feature_data_reader(dataPath):
+def read_txtlist(sourceDir, path):
+    pathList = []
+    with open(path, 'r') as f:
+        aPath = f.readline().strip()
+        while aPath:
+            if aPath.startswith('/'):
+                aPath = aPath[1:]
+            pathList.append(os.path.join(sourceDir, aPath))
+            aPath = f.readline().strip()
+    return pathList
+
+def feature_data_reader(dataPath, featureList):
     feature_list = None
     global_pic = None
-    filePathList = []
-    for dirName in os.listdir(dataPath):
-        if str(dirName).startswith('.'):
-            continue
-        currentDir = os.path.join(dataPath, dirName)
-        for fileName in os.listdir(currentDir):    
-            if str(fileName).endswith('.npy'):
-                fileFullPath = os.path.join(currentDir, fileName)
-                featureVec = np.load(fileFullPath)
-                if feature_list is None:
-                    #第一个矩阵就错的时候会bug
-                    #这里简单处理一下这种错误
-                    if featureVec.shape[0]<10:
-                        print "feature at head error"
-                        continue
-
-                    #初始化feature_list
-                    feature_list = featureVec
-                    filePathList.append(fileFullPath)
-                else:
-                    try:
-                        # append feature_list
-                        feature_list = np.vstack((feature_list, featureVec))
-                        filePathList.append(fileFullPath)
-
-                    except:
-                        # if the feature stack above errors neglect current pic and feature
-                        pass
-                
+    filePathList = read_txtlist(dataPath, featureList)
+    #Use first one to initialize
+    feature_list = np.load(filePathList[0])
+    #Concat else
+    for fileFullPath in filePathList[1:]:    
+        featureVec = np.load(fileFullPath)
+        feature_list = np.vstack((feature_list, featureVec))
     return np.asarray(feature_list), global_pic, filePathList 
 
 def cluster_face_features(feature_list, method=None, precomputed=True, eps=0.5):
@@ -92,12 +81,12 @@ def __compute_pairwise_distance(face_feature_list):
     dist_matrix = 1 - np.dot(face_feature_list, face_feature_list.T)
     return dist_matrix
 
-def my_cluster(videoDir, picDir, method, saveResult=False, saveDir='result', eps=0.5, **kwargs):
+def my_cluster(videoDir, featureList, picDir, method, saveResult=False, saveDir='result', eps=0.5, **kwargs):
 
     resultDict = {}
     t0 = time.time()
     print "Start loading data: ", t0
-    feature_list, global_pic, filePathList = feature_data_reader(videoDir)
+    feature_list, global_pic, filePathList = feature_data_reader(videoDir, featureList)
     t1 = time.time()
     print "Done loading data. Start clustering: ", t1, "Loading data time cost: ", t1 - t0
 
@@ -138,14 +127,14 @@ def my_cluster(videoDir, picDir, method, saveResult=False, saveDir='result', eps
         resultDict[filePathList[i].split('/')[-1].replace('.npy', '')] = y_pred[i]
     return resultDict
 
-def cluster_from_video_dir(videoDir, picDir, methodList=['DBSCAN'], saveResult=False, saveDir='result', eps=0.5):
+def cluster_from_video_dir(videoDir, featureList, picDir, methodList=['DBSCAN'], saveResult=False, saveDir='result', eps=0.5):
     methodResultDict = {}
     for method in methodList:
         t0 = time.time()
         print "method: " + method
         print "start time: ", t0
         
-        methodResultDict[method] = my_cluster(videoDir, picDir, method, saveResult, saveDir, eps)
+        methodResultDict[method] = my_cluster(videoDir, featureList, picDir, method, saveResult, saveDir, eps)
         t1 = time.time()
         print "end time: ", t1
         print "time cost: ", t1-t0

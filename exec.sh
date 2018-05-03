@@ -1,1 +1,1 @@
-python cluster_test.py --method DBSCAN --videoDir /workspace/code/api_test/face-feature-api/ava-version-python-little-endian/facex_api_response_blue_#180503-001628 --picDir /workspace/data/blue/image_face_0_cropimg --saveResult True --saveDir result_70000 --eps 0.45
+python cluster_test.py --method DBSCAN --videoDir /workspace/code/api_test/face-feature-api/ava-version-python-little-endian/feature_face0 --picDir /workspace/data/blue/image_face_0_cropimg --saveResult True --saveDir result_70000 --eps 0.45
