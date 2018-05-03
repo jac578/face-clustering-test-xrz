@@ -32,7 +32,10 @@ def feature_data_reader(dataPath, featureList):
     #Use first one to initialize
     feature_list = np.load(filePathList[0])
     #Concat else
+    cnt = 0
     for fileFullPath in filePathList[1:]:    
+        cnt += 1 
+        print cnt
         featureVec = np.load(fileFullPath)
         feature_list = np.vstack((feature_list, featureVec))
     return np.asarray(feature_list), global_pic, filePathList 
