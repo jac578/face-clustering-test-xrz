@@ -76,9 +76,9 @@ def multiprocess_feature_data_reader(dataPath, featureList, nProcess=1):
         resList = []
         for i in range(nProcess):
             if i == nProcess - 1:
-                resList[i] = p.apply_async(feature_data_reader_fromList,args=(filePathList[pos:],))
+                resList.append(p.apply_async(feature_data_reader_fromList,args=(filePathList[pos:],)))
             else: 
-                resList[i] = p.apply_async(feature_data_reader_fromList,args=(filePathList[pos:pos+step],))
+                resList.append(p.apply_async(feature_data_reader_fromList,args=(filePathList[pos:pos+step],)))
                 pos += step
         p.close()
         p.join()
