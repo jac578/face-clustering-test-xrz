@@ -46,10 +46,15 @@ def feature_data_reader(dataPath, featureList):
     return np.asarray(feature_list), global_pic, filePathList 
 
 def feature_data_reader_fromList(filePathList):
+    name = multiprocessing.current_process().name
     #Use first one to initialize
     feature_list = np.load(filePathList[0])
     #Concat else
+    cnt = 0
     for fileFullPath in filePathList[1:]:    
+        cnt += 1
+        if cnt == 1000:
+            print "Process", name, "done concating", cnt
         featureVec = np.load(fileFullPath)
         try:
             feature_list = np.vstack((feature_list, featureVec))
