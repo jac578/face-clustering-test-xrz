@@ -53,7 +53,7 @@ def feature_data_reader_fromList(filePathList):
     cnt = 0
     for fileFullPath in filePathList[1:]:    
         cnt += 1
-        if cnt == 1000:
+        if cnt%1000 == 0:
             print "Process", name, "done concating", cnt
         featureVec = np.load(fileFullPath)
         try:
