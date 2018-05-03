@@ -146,6 +146,7 @@ if __name__ == '__main__':
     parser.add_argument('--saveResult', type=bool, required=True, help='Whether to save the result pics')
     parser.add_argument('--saveDir', type=str, required=True, help='Path to save clustered pictures')
     parser.add_argument('--eps', type=float, required=False, default=None, help='DBSCAN parameter')
+    parser.add_argument('--nProcess', type=int, required=False, default=1, help='Number of processes to read data')
     args = vars(parser.parse_args())
 
 
@@ -157,7 +158,8 @@ if __name__ == '__main__':
         eps = ''
     else:
         eps = str(args['eps'])
-    cluster_from_video_dir(args['videoDir'], args['featureList'], args['picDir'], methodList=[args['method']], saveResult=args['saveResult'], saveDir=args['saveDir']+eps, eps=args['eps'])
+    cluster_from_video_dir(args['videoDir'], args['featureList'], args['picDir'], methodList=[args['method']], 
+                            saveResult=args['saveResult'], saveDir=args['saveDir']+eps, eps=args['eps'], nProcess=args['nProcess'])
 
     '''
     clusterPrecision, recallDict = cluster_and_test_from_video_dir('5ab52c0e28734100076d67b9', labelDict, methodList=['DBSCAN'])

@@ -134,13 +134,13 @@ def __compute_pairwise_distance(face_feature_list):
     dist_matrix = 1 - np.dot(face_feature_list, face_feature_list.T)
     return dist_matrix
 
-def my_cluster(videoDir, featureList, picDir, method, saveResult=False, saveDir='result', eps=0.5, **kwargs):
+def my_cluster(videoDir, featureList, picDir, method, saveResult=False, saveDir='result', eps=0.5, nProcess=1, **kwargs):
 
     resultDict = {}
     t0 = time.time()
     print "Start loading data: ", t0
     #feature_list, global_pic, filePathList = feature_data_reader(videoDir, featureList)
-    feature_list, global_pic, filePathList = multiprocess_feature_data_reader(videoDir, featureList, nProcess=7)
+    feature_list, global_pic, filePathList = multiprocess_feature_data_reader(videoDir, featureList, nProcess)
 
     t1 = time.time()
     print "Done loading data. Start clustering: ", t1, "Loading data time cost: ", t1 - t0
@@ -182,14 +182,14 @@ def my_cluster(videoDir, featureList, picDir, method, saveResult=False, saveDir=
         resultDict[filePathList[i].split('/')[-1].replace('.npy', '')] = y_pred[i]
     return resultDict
 
-def cluster_from_video_dir(videoDir, featureList, picDir, methodList=['DBSCAN'], saveResult=False, saveDir='result', eps=0.5):
+def cluster_from_video_dir(videoDir, featureList, picDir, methodList=['DBSCAN'], saveResult=False, saveDir='result', eps=0.5, nProcess=1):
     methodResultDict = {}
     for method in methodList:
         t0 = time.time()
         print "method: " + method
         print "start time: ", t0
         
-        methodResultDict[method] = my_cluster(videoDir, featureList, picDir, method, saveResult, saveDir, eps)
+        methodResultDict[method] = my_cluster(videoDir, featureList, picDir, method, saveResult, saveDir, eps, nProcess)
         t1 = time.time()
         print "end time: ", t1
         print "time cost: ", t1-t0
