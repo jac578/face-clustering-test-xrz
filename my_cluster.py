@@ -214,7 +214,7 @@ def my_cluster(videoDir, featureList, picDir, method, saveResult=False, saveDir=
 def my_cluster_after_read(feature_list, filePathList, picDir, method, saveResult=False, saveDir='result', eps=0.5):
     t1 = time.time()
     y_pred = cluster_face_features(feature_list=feature_list, method=method, eps=eps)
-
+    assert len(y_pred) == len(filePathList)
     t2 = time.time()
     print "Done clustering. Start copying result: ", t2, "Clustering time cost", t2 - t1
 
