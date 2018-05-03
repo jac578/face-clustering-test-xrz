@@ -1,4 +1,1 @@
-for((i=0.31;i<=0.32;i+=0.01));  
-do   
-python cluster_test.py --method DBSCAN --videoDir /workspace/data/blue/feature/data_blue_feature --picDir /workspace/data/blue/crop_faces --saveResult True --saveDir result --eps $i;
-done 
+python cluster_test.py --method DBSCAN --videoDir /workspace/code/api_test/face-feature-api/ava-version-python-little-endian/facex_api_response_blue_#180503-001628 --picDir /workspace/data/blue/image_face_0_cropimg --saveResult True --saveDir result_70000 --eps 0.45

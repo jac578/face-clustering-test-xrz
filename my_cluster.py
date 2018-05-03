@@ -95,8 +95,12 @@ def __compute_pairwise_distance(face_feature_list):
 def my_cluster(videoDir, picDir, method, saveResult=False, saveDir='result', eps=0.5, **kwargs):
 
     resultDict = {}
-
+    t0 = time.time()
+    print "Start loading data: ", t0
     feature_list, global_pic, filePathList = feature_data_reader(videoDir)
+    t1 = time.time()
+    print "Done loading data. Start clustering: ", t1, "Loading data time cost: ", t1 - t0
+
     if method == 'RankOrder':
         if (kwargs.has_key('RO_n_neighbors')) and (kwargs.has_key('RO_thresh')):
             y_pred = rankOrder_cluster_format(feature_list, kwargs['RO_n_neighbors'], kwargs['RO_thresh'])
@@ -105,6 +109,10 @@ def my_cluster(videoDir, picDir, method, saveResult=False, saveDir='result', eps
             y_pred = rankOrder_cluster_format(feature_list)
     else:
         y_pred = cluster_face_features(feature_list=feature_list, method=method, eps=eps)
+
+    t2 = time.time()
+    print "Done clustering. Start copying result: ", t2, "Clustering time cost", t2 - t1
+
     if saveResult:
         #saveDirPrefix = 'result_' + method + videoDir.replace('./', '')
         saveDirPrefix = saveDir
@@ -121,6 +129,9 @@ def my_cluster(videoDir, picDir, method, saveResult=False, saveDir='result', eps
             
             shutil.copyfile(picPath, classDir+picName)
         #shutil.copytree(saveDirPrefix, os.path.join(videoDir, saveDirPrefix))
+    
+    t3 = time.time()
+    print "Done copying: ", t3, "Copying time cost", t3 - t2
 
     assert len(y_pred) == len(filePathList)
     for i in range(len(y_pred)):

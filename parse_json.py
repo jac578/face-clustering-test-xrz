@@ -49,4 +49,5 @@ def individual_to_npy(individualDict, videoPath):
 
 
 if __name__ == "__main__":
-    convert_json_file_to_npy('sample2.json')
+    convert_json_file_to_npy('video1.json')
+    convert_json_file_to_npy('video2.json')
