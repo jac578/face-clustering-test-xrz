@@ -133,7 +133,7 @@ def my_cluster(videoDir, featureList, picDir, method, saveResult=False, saveDir=
     t0 = time.time()
     print "Start loading data: ", t0
     #feature_list, global_pic, filePathList = feature_data_reader(videoDir, featureList)
-    feature_list, global_pic, filePathList = multiprocess_feature_data_reader(videoDir, featureList, nProcess=1)
+    feature_list, global_pic, filePathList = multiprocess_feature_data_reader(videoDir, featureList, nProcess=7)
 
     t1 = time.time()
     print "Done loading data. Start clustering: ", t1, "Loading data time cost: ", t1 - t0
