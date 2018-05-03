@@ -54,14 +54,13 @@ def feature_data_reader_fromList(filePathList):
     print feature_list.shape
     assert feature_list.shape[0] > 0
     #Concat else
-    cnt = -1
+    cnt = 0
     noHeadFilePathList = filePathList[1:]
-    for fileFullPath in noHeadFilePathList:    
-        cnt += 1
+    while(cnt < len(noHeadFilePathList)):
+        fileFullPath = noHeadFilePathList[cnt]
         if cnt%1000 == 0:
             print "Process", name, "done concating", cnt
         featureVec = np.load(fileFullPath)
-        
 
         if len(featureVec.shape)>0:# == 512:
             feature_list = np.vstack((feature_list, featureVec))
@@ -72,6 +71,25 @@ def feature_data_reader_fromList(filePathList):
             print feature_list.shape[0], len(noHeadFilePathList), "Process", name
             cnt -= 1
             print feature_list.shape, featureVec.shape, fileFullPath
+        cnt += 1
+
+    # cnt = -1
+    # for fileFullPath in noHeadFilePathList:    
+    #     cnt += 1
+    #     if cnt%1000 == 0:
+    #         print "Process", name, "done concating", cnt
+    #     featureVec = np.load(fileFullPath)
+        
+
+    #     if len(featureVec.shape)>0:# == 512:
+    #         feature_list = np.vstack((feature_list, featureVec))
+    #     else:
+    #         print 'in', "Process", name
+    #         print feature_list.shape[0], len(noHeadFilePathList), "Process", name
+    #         noHeadFilePathList.pop(cnt)
+    #         print feature_list.shape[0], len(noHeadFilePathList), "Process", name
+    #         cnt -= 1
+    #         print feature_list.shape, featureVec.shape, fileFullPath
     print feature_list.shape[0], len(noHeadFilePathList), "Process", name
     newFilePathList = [filePathList[0]] + noHeadFilePathList
     print feature_list.shape[0], len(newFilePathList), "Process", name
