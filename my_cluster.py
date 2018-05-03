@@ -13,6 +13,8 @@ import urllib2
 from parse_json import convert_json_file_to_npy
 from demo_noLFW import rankOrder_cluster_format
 
+import multiprocessing
+
 
 def read_txtlist(sourceDir, path):
     pathList = []
@@ -42,6 +44,44 @@ def feature_data_reader(dataPath, featureList):
         except:
             print feature_list.shape, featureVec.shape, fileFullPath
     return np.asarray(feature_list), global_pic, filePathList 
+
+def feature_data_reader_fromList(filePathList):
+    feature_list = np.load(filePathList[0])
+    #Concat else
+    cnt = 0
+    for fileFullPath in filePathList[1:]:    
+        cnt += 1 
+        print cnt
+        featureVec = np.load(fileFullPath)
+        try:
+            feature_list = np.vstack((feature_list, featureVec))
+        except:
+            print feature_list.shape, featureVec.shape, fileFullPath
+    return np.asarray(feature_list)
+
+def multiprocess_feature_data_reader(dataPath, featureList, nProcess=1):
+    if nProcess == 1:
+        return feature_data_reader(dataPath, featureList)
+    else:
+        feature_list = None
+        global_pic = None
+        filePathList = read_txtlist(dataPath, featureList)
+        total_line = len(filePathList)
+        p = multiprocessing.Pool(nProcess)
+        pos = 0
+        step = total_line / nProcess + 1
+        for i in range(nProcess):
+            if i == nProcess - 1:
+                res = p.apply_async(feature_data_reader_fromList,args=(filePathList[pos:],))
+            else: 
+                res = p.apply_async(feature_data_reader_fromList,args=(filePathList[pos:pos+step],))
+                pos += step
+            if i == 0:
+                feature_list = res.get()
+            else:
+                feature_list = np.vstack((feature_list, res.get()))
+        return np.asarray(feature_list), global_pic, filePathList 
+
 
 def cluster_face_features(feature_list, method=None, precomputed=True, eps=0.5):
     if feature_list is not None:
@@ -92,7 +132,9 @@ def my_cluster(videoDir, featureList, picDir, method, saveResult=False, saveDir=
     resultDict = {}
     t0 = time.time()
     print "Start loading data: ", t0
-    feature_list, global_pic, filePathList = feature_data_reader(videoDir, featureList)
+    #feature_list, global_pic, filePathList = feature_data_reader(videoDir, featureList)
+    feature_list, global_pic, filePathList = multiprocess_feature_data_reader(videoDir, featureList, nProcess=1)
+
     t1 = time.time()
     print "Done loading data. Start clustering: ", t1, "Loading data time cost: ", t1 - t0
 
