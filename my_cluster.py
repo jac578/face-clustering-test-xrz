@@ -67,6 +67,7 @@ def feature_data_reader_fromList(filePathList):
             print len(noHeadFilePathList), "Process", name
             cnt -= 1
             print feature_list.shape, featureVec.shape, fileFullPath
+    print len(noHeadFilePathList), "Process", name
     newFilePathList = [filePathList[0]] + noHeadFilePathList
     print feature_list.shape[0], len(newFilePathList), "Process", name
     return np.asarray(feature_list), newFilePathList
