@@ -62,7 +62,9 @@ def feature_data_reader_fromList(filePathList):
         try:
             feature_list = np.vstack((feature_list, featureVec))
         except:
+            print len(noHeadFilePathList), "Process", name
             noHeadFilePathList.pop(cnt)
+            print len(noHeadFilePathList), "Process", name
             cnt -= 1
             print feature_list.shape, featureVec.shape, fileFullPath
     newFilePathList = [filePathList[0]] + noHeadFilePathList
