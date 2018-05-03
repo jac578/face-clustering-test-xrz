@@ -73,16 +73,20 @@ def multiprocess_feature_data_reader(dataPath, featureList, nProcess=1):
         p = multiprocessing.Pool(nProcess)
         pos = 0
         step = total_line / nProcess + 1
+        resList = []
         for i in range(nProcess):
             if i == nProcess - 1:
-                res = p.apply_async(feature_data_reader_fromList,args=(filePathList[pos:],))
+                resList[i] = p.apply_async(feature_data_reader_fromList,args=(filePathList[pos:],))
             else: 
-                res = p.apply_async(feature_data_reader_fromList,args=(filePathList[pos:pos+step],))
+                resList[i] = p.apply_async(feature_data_reader_fromList,args=(filePathList[pos:pos+step],))
                 pos += step
-            if i == 0:
-                feature_list = res.get()
+        p.close()
+        p.join()
+        for i in range(nProcess):
+            if i == 0:  
+                feature_list = resList[i].get()
             else:
-                feature_list = np.vstack((feature_list, res.get()))
+                feature_list = np.vstack((feature_list, resList[i].get()))
         return np.asarray(feature_list), global_pic, filePathList 
 
 
