@@ -16,6 +16,8 @@ from demo_noLFW import rankOrder_cluster_format
 import multiprocessing
 
 
+FEATURE_DIENSION = 512
+
 def read_txtlist(sourceDir, path):
     pathList = []
     with open(path, 'r') as f:
@@ -59,9 +61,9 @@ def feature_data_reader_fromList(filePathList):
         if cnt%1000 == 0:
             print "Process", name, "done concating", cnt
         featureVec = np.load(fileFullPath)
-        try:
+        if featureVec.shape[0] == 512:
             feature_list = np.vstack((feature_list, featureVec))
-        except:
+        else:
             print feature_list.shape[0], len(noHeadFilePathList), "Process", name
             noHeadFilePathList.pop(cnt)
             print feature_list.shape[0], len(noHeadFilePathList), "Process", name
