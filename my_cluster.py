@@ -61,6 +61,12 @@ def feature_data_reader_fromList(filePathList):
         if cnt%1000 == 0:
             print "Process", name, "done concating", cnt
         featureVec = np.load(fileFullPath)
+
+        try:
+            featureVec.shape[0] = 1
+        except:
+            print featureVec, "Process", name, cnt
+
         if featureVec.shape[0] == 512:
             feature_list = np.vstack((feature_list, featureVec))
         else:
