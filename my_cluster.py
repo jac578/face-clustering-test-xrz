@@ -63,7 +63,8 @@ def feature_data_reader_fromList(filePathList):
             noHeadFilePathList.pop(cnt)
             cnt -= 1
             print feature_list.shape, featureVec.shape, fileFullPath
-    return np.asarray(feature_list)
+    newFilePathList = [filePathList[0]] + noHeadFilePathList
+    return np.asarray(feature_list), newFilePathList
 
 def multiprocess_feature_data_reader(dataPath, featureList, nProcess=1):
     if nProcess == 1:
@@ -87,9 +88,11 @@ def multiprocess_feature_data_reader(dataPath, featureList, nProcess=1):
         p.join()
         for i in range(nProcess):
             if i == 0:  
-                feature_list = resList[i].get()
+                feature_list, filePathList = resList[i].get()
             else:
-                feature_list = np.vstack((feature_list, resList[i].get()))
+                feature_block, filePathList_part = resList[i].get()
+                feature_list = np.vstack((feature_list, feature_block))
+                filePathList = filePathList + filePathList_part
         return np.asarray(feature_list), global_pic, filePathList 
 
 
