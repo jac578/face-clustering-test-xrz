@@ -49,6 +49,7 @@ def feature_data_reader_fromList(filePathList):
     name = multiprocessing.current_process().name
     #Use first one to initialize
     feature_list = np.load(filePathList[0])
+    print feature_list.shape
     assert feature_list.shape[0] > 0
     #Concat else
     cnt = -1
