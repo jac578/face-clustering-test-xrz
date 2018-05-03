@@ -37,7 +37,10 @@ def feature_data_reader(dataPath, featureList):
         cnt += 1 
         print cnt
         featureVec = np.load(fileFullPath)
-        feature_list = np.vstack((feature_list, featureVec))
+        try:
+            feature_list = np.vstack((feature_list, featureVec))
+        except:
+            print feature_list.shape, featureVec.shape, fileFullPath
     return np.asarray(feature_list), global_pic, filePathList 
 
 def cluster_face_features(feature_list, method=None, precomputed=True, eps=0.5):
