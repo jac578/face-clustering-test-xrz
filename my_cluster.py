@@ -176,10 +176,12 @@ def my_cluster(videoDir, featureList, picDir, method, saveResult=False, saveDir=
     
     t3 = time.time()
     print "Done copying: ", t3, "Copying time cost", t3 - t2
+    print "Exiting..."
+    exit(0)
 
-    assert len(y_pred) == len(filePathList)
-    for i in range(len(y_pred)):
-        resultDict[filePathList[i].split('/')[-1].replace('.npy', '')] = y_pred[i]
+    # assert len(y_pred) == len(filePathList)
+    # for i in range(len(y_pred)):
+    #     resultDict[filePathList[i].split('/')[-1].replace('.npy', '')] = y_pred[i]
     return resultDict
 
 def cluster_from_video_dir(videoDir, featureList, picDir, methodList=['DBSCAN'], saveResult=False, saveDir='result', eps=0.5, nProcess=1):
