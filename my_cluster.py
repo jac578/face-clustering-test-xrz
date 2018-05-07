@@ -209,8 +209,8 @@ def my_cluster_after_read(feature_list, filePathList, picDir, method, saveResult
             shutil.copyfile(picPath, classDir+picName)
     t3 = time.time()
     print "Done copying: ", t3, "Copying time cost", t3 - t2
-    print "Exiting..."
-    exit(0)
+    # print "Exiting..."
+    # exit(0)
 
     return
 
