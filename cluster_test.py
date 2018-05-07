@@ -158,9 +158,11 @@ if __name__ == '__main__':
         eps = ''
     else:
         eps = str(args['eps'])
+
+    saveDir = args['saveDir']+'_'+eps
     cluster_from_video_dir(args['videoDir'], args['featureList'], args['picDir'], methodList=[args['method']], 
-                            saveResult=args['saveResult'], saveDir=args['saveDir']+'_'+eps, eps=args['eps'], nProcess=args['nProcess'])
+                            saveResult=args['saveResult'], saveDir=saveDir, eps=args['eps'], nProcess=args['nProcess'])
 
     print args['eps']
-    os.system("ls -lR {}|grep \"^-\"|wc -l".format(args['saveDir']))
-    os.system("ls {}|wc -l".format(args['saveDir']))
+    os.system("ls -lR {}|grep \"^-\"|wc -l".format(saveDir))
+    os.system("ls {}|wc -l".format(saveDir))
