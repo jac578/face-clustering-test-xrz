@@ -1,7 +1,7 @@
 # Clustering example using LFW data:
 import os
 import pandas as pd
-from matplotlib import pyplot as plt
+# from matplotlib import pyplot as plt
 import argparse
 import json
 import scipy.io as sio
@@ -24,11 +24,11 @@ def plot_histogram(lfw_dir):
     df = pd.DataFrame(filecount_dict.items(), columns=['Name', 'Count'])
     print 'Singletons : {}\nTwo :{}\n'.format((df['Count'] == 1).sum(),
                                               (df['Count'] == 2).sum())
-    plt.hist(df['Count'], bins=max(df['Count']))
-    plt.title('Cluster Sizes')
-    plt.xlabel('No of images in folder')
-    plt.ylabel('No of folders')
-    plt.show()
+    # plt.hist(df['Count'], bins=max(df['Count']))
+    # plt.title('Cluster Sizes')
+    # plt.xlabel('No of images in folder')
+    # plt.ylabel('No of folders')
+    # plt.show()
 
 
 def approximate_rank_order_clustering(vectors, n_neighbors=200, thresh=1.1):
