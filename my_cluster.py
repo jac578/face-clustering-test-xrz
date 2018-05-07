@@ -10,7 +10,7 @@ import shutil
 
 import urllib2
 from parse_json import convert_json_file_to_npy
-from demo_noLFW import rankOrder_cluster_format
+#from demo_noLFW import rankOrder_cluster_format
 
 import multiprocessing
 
