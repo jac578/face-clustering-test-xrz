@@ -2,7 +2,6 @@
 from sklearn import cluster
 from scipy.spatial.distance import cosine as ssd_cosine_dist
 import numpy as np
-from matplotlib import pyplot as plt
 import scipy.misc as sc
 
 import time
