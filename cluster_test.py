@@ -161,12 +161,6 @@ if __name__ == '__main__':
     cluster_from_video_dir(args['videoDir'], args['featureList'], args['picDir'], methodList=[args['method']], 
                             saveResult=args['saveResult'], saveDir=args['saveDir']+eps, eps=args['eps'], nProcess=args['nProcess'])
 
-    '''
-    clusterPrecision, recallDict = cluster_and_test_from_video_dir('5ab52c0e28734100076d67b9', labelDict, methodList=['DBSCAN'])
-    print clusterPrecision
-    meanRecall = 0
-    for k,v in recallDict.items():
-        meanRecall += v
-    meanRecall /= len(recallDict)
-    print meanRecall
-    '''
+    print args['eps']
+    os.system("ls -lR {}|grep \"^-\"|wc -l".format(args['saveDir']))
+    os.system("ls {}|wc -l".format(args['saveDir']))
