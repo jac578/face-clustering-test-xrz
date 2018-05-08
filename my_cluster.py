@@ -72,23 +72,6 @@ def feature_data_reader_fromList(filePathList):
             print feature_list.shape, featureVec.shape, fileFullPath
         cnt += 1
 
-    # cnt = -1
-    # for fileFullPath in noHeadFilePathList:    
-    #     cnt += 1
-    #     if cnt%1000 == 0:
-    #         print "Process", name, "done concating", cnt
-    #     featureVec = np.load(fileFullPath)
-        
-
-    #     if len(featureVec.shape)>0:# == 512:
-    #         feature_list = np.vstack((feature_list, featureVec))
-    #     else:
-    #         print 'in', "Process", name
-    #         print feature_list.shape[0], len(noHeadFilePathList), "Process", name
-    #         noHeadFilePathList.pop(cnt)
-    #         print feature_list.shape[0], len(noHeadFilePathList), "Process", name
-    #         cnt -= 1
-    #         print feature_list.shape, featureVec.shape, fileFullPath
     print feature_list.shape[0], len(noHeadFilePathList), "Process", name
     newFilePathList = [filePathList[0]] + noHeadFilePathList
     print feature_list.shape[0], len(newFilePathList), "Process", name
@@ -205,8 +188,10 @@ def my_cluster_after_read(feature_list, filePathList, picDir, method, saveResult
             if picName.startswith('/'):
                 picName = picName[1:]
             picPath = os.path.join(picDir, picName)
-            
-            shutil.copyfile(picPath, classDir+picName)
+            try:
+                shutil.copyfile(picPath, classDir+picName)
+            except(IOError e):
+                pass
     t3 = time.time()
     print "Done copying: ", t3, "Copying time cost", t3 - t2
     # print "Exiting..."
