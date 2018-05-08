@@ -190,7 +190,7 @@ def my_cluster_after_read(feature_list, filePathList, picDir, method, saveResult
             picPath = os.path.join(picDir, picName)
             try:
                 shutil.copyfile(picPath, classDir+picName)
-            except(IOError e):
+            except IOError, e:
                 pass
     t3 = time.time()
     print "Done copying: ", t3, "Copying time cost", t3 - t2
