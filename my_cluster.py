@@ -170,6 +170,8 @@ def my_cluster_after_read(feature_list, filePathList, picDir, method, saveResult
         #saveDirPrefix = 'result_' + method + videoDir.replace('./', '')
         print "Saving..."
         saveDirPrefix = saveDir
+        print saveDirPrefix
+        exit(0)
         for i in range(len(y_pred)):
             classDir = saveDirPrefix+'/'+str(y_pred[i])+'/'
             try:
