@@ -163,10 +163,12 @@ if __name__ == '__main__':
     saveDir = args['saveDir']+'_'+eps
  
     if args['evaluate']:
+        print "Will save result"
         saveDir = args['saveDir']+'_'+eps
         cluster_and_test_from_video_dir(args['videoDir'], args['featureList'], args['picDir'], methodList=[args['method']], 
                         eps=args['eps'], nProcess=args['nProcess'])
     else:
+        print "Will Evaluate"
         cluster_from_video_dir(args['videoDir'], args['featureList'], args['picDir'], methodList=[args['method']], 
                         saveResult=args['saveResult'], saveDir=saveDir, eps=args['eps'], nProcess=args['nProcess'])
         print args['eps']
