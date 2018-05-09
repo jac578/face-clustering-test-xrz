@@ -177,6 +177,7 @@ def my_cluster_after_read(feature_list, filePathList, picDir, method, saveResult
                 os.makedirs(classDir)
             except:
                 pass
+            print filePathList[i]
             picName = filePathList[i].replace('.npy', '.jpg').split('/')[-1]
             if picName.startswith('/'):
                 picName = picName[1:]
