@@ -206,7 +206,7 @@ def cluster_from_video_dir(videoDir, featureList, picDir, methodList=['DBSCAN'],
     print "Done loading data. Start clustering: ", t1, "Loading data time cost: ", t1 - t0
     
     method = methodList[0]
-    if type(eps) != dict:
+    if type(eps) != list:
         eps = [eps]
     epsResultDict = {}
     for paraEps in eps:

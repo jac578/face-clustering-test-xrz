@@ -8,18 +8,16 @@ import argparse
 def load_label(testsetDir):
     alone_cluster_label_cnt = 1000
     labelDict = {}
+    labelCnt = 0
     for dir in os.listdir(testsetDir):
         if dir.startswith('.'):
             continue
         else:
             currentDir = os.path.join(testsetDir, dir)
             for fileName in os.listdir(currentDir):
-                if fileName.endswith('.jpg'):
-                    if str(dir) != '-1':
-                        labelDict[fileName] = dir
-                    else:
-                        labelDict[fileName] = str(alone_cluster_label_cnt)
-                        alone_cluster_label_cnt += 1
+                if fileName.endswith('.bin'):
+                    labelDict[fileName] = labelCnt
+        labelCnt += 1
     return labelDict
 
 def cluster_and_test_from_video_dir(videoDir, featureList, picDir, methodList=['DBSCAN'], labelDict=None, eps=0.5, nProcess=1):
@@ -30,11 +28,22 @@ def cluster_and_test_from_video_dir(videoDir, featureList, picDir, methodList=['
         epsResultDict = cluster_from_video_dir(videoDir, featureList, picDir, methodList, saveResult=False, eps=eps, nProcess=nProcess)
     for paraEps in epsResultDict.keys():
         resultDict = epsResultDict[paraEps]
+        resultDict = divide_alone_cluster(resultDict)
         resultClusterDict = make_clusterDict_from_resultDict(resultDict)
         labelClusterDict = make_clusterDict_from_resultDict(labelDict)
         
         f_score = pairwise_f_score(resultClusterDict, labelClusterDict, labelDict)
         return f_score
+
+def divide_alone_cluster(resultDict):
+    divideCnt = np.amax(dict(resultDict).values) + 1
+    print "divideCnt start at:", divideCnt
+    for key in resultDict.keys():
+        if resultDict[key] == -1:
+            resultDict[key] = divideCnt
+            print divideCnt
+    return resultDict
+
 
 def find_max_clustered_num(label, resultClusterDict, labelDict):
     maxNum = 0
@@ -148,6 +157,7 @@ if __name__ == '__main__':
     parser.add_argument('--eps', type=float, required=False, default=None, help='DBSCAN parameter')
     parser.add_argument('--nProcess', type=int, required=False, default=1, help='Number of processes to read data')
     parser.add_argument('--evaluate', type=bool, required=False, default=False, help='Do you need evaluation over list of eps?')
+    parser.add_argument('--labelDict', type=str, required=False, default=None, help='Path of the labels')
     args = vars(parser.parse_args())
 
 
@@ -165,8 +175,9 @@ if __name__ == '__main__':
     if args['evaluate']:
         print "Will save result"
         saveDir = args['saveDir']+'_'+eps
+        labelDict = load_label(args['labelDict'])
         cluster_and_test_from_video_dir(args['videoDir'], args['featureList'], args['picDir'], methodList=[args['method']], 
-                        eps=args['eps'], nProcess=args['nProcess'])
+                        eps=args['eps'], nProcess=args['nProcess'], labelDict=labelDict)
     else:
         print "Will Evaluate"
         cluster_from_video_dir(args['videoDir'], args['featureList'], args['picDir'], methodList=[args['method']], 
