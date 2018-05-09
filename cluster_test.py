@@ -33,7 +33,7 @@ def cluster_and_test_from_video_dir(videoDir, featureList, picDir, saveResult=Fa
         labelClusterDict = make_clusterDict_from_resultDict(labelDict)
         
         f_score = pairwise_f_score(resultClusterDict, labelClusterDict, labelDict)
-        return f_score
+    return 
 
 def divide_alone_cluster(resultDict):
     divideCnt = np.amax(dict(resultDict).values()) + 1
@@ -101,7 +101,7 @@ def pairwise_f_score(resultClusterDict, labelClusterDict, labelDict):
     precision = pairwise_precision(resultClusterDict, labelDict) 
     recall = pairwise_recall(resultClusterDict, labelClusterDict, labelDict)
     f_score = 2 * precision * recall / (precision + recall)
-    print precision, recall
+    print "Precision: ", precision, "Recall: ", recall
     return f_score
 
 def pairwise_precision(resultClusterDict, labelDict):
