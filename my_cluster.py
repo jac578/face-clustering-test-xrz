@@ -186,7 +186,7 @@ def my_cluster_after_read(feature_list, filePathList, picDir, method, saveResult
             if picName.startswith('/'):
                 picName = picName[1:]
             picPath = os.path.join(picDir, picName)
-            shutil.copyfile(picPath, classDir+picName.split['/'][-1])
+            shutil.copyfile(picPath, classDir+picName.split('/')[-1])
     t3 = time.time()
     print "Done copying: ", t3, "Copying time cost", t3 - t2
     
