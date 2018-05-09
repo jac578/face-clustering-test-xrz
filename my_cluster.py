@@ -211,7 +211,7 @@ def cluster_from_video_dir(videoDir, featureList, picDir, methodList=['DBSCAN'],
     epsResultDict = {}
     for paraEps in eps:
         t0 = time.time()
-        print "eps: " + paraEps
+        print "eps: " + str(paraEps)
         print "start time: ", t0
         epsResultDict[paraEps] = my_cluster(feature_list, filePathList, picDir, method, saveResult, saveDir, eps, nProcess)
         # my_cluster(videoDir, featureList, picDir, method, saveResult, saveDir, eps, nProcess)
