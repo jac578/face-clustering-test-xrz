@@ -189,6 +189,7 @@ def my_cluster_after_read(feature_list, filePathList, picDir, method, saveResult
     
 
     assert len(y_pred) == len(filePathList)
+    print y_pred
     resultDict = {}
     for i in range(len(y_pred)):
         resultDict[filePathList[i].split('/')[-1].replace('.npy', '')] = y_pred[i]#Needs to be customized here
