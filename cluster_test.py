@@ -175,7 +175,7 @@ if __name__ == '__main__':
         print "Will Evaluate"
         labelDict = load_label(args['labelDict'])
         cluster_and_test_from_video_dir(args['videoDir'], args['featureList'], args['picDir'], methodList=[args['method']], 
-                        eps=[0.3, 0.32], saveResult=args['saveResult'], saveDir=args['saveDir'], nProcess=args['nProcess'], labelDict=labelDict)
+                        eps=[0.3, 0.32, 0.34, 0.36, 0.38, 0.4, 0.42, 0.44, 0.46, 0.48, 0.5], saveResult=args['saveResult'], saveDir=args['saveDir'], nProcess=args['nProcess'], labelDict=labelDict)
     else:
         print "Will Save Result"
         saveDir = saveDir=args['saveDir'] +'_'+ eps
