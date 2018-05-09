@@ -154,7 +154,7 @@ if __name__ == '__main__':
     parser.add_argument('--picDir', type=str, required=True, help='Path of pictures to be clustered')
     parser.add_argument('--saveResult', type=bool, required=True, help='Whether to save the result pics')
     parser.add_argument('--saveDir', type=str, required=True, help='Path to save clustered pictures')
-    parser.add_argument('--eps', type=float, required=False, default=None, help='DBSCAN parameter')
+    parser.add_argument('--eps', type=list, required=False, default=None, help='DBSCAN parameter')
     parser.add_argument('--nProcess', type=int, required=False, default=1, help='Number of processes to read data')
     parser.add_argument('--evaluate', type=bool, required=False, default=False, help='Do you need evaluation over list of eps?')
     parser.add_argument('--labelDict', type=str, required=False, default=None, help='Path of the labels')
