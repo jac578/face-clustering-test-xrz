@@ -175,11 +175,8 @@ def my_cluster_after_read(feature_list, filePathList, picDir, method, saveResult
             classDir = saveDirPrefix+'/'+str(y_pred[i])+'/'
             try:
                 os.makedirs(classDir)
-                print "successfully made"
             except:
-                print "failed to make dir"
                 pass
-            exit(0)
             picName = filePathList[i].replace('.npy', '.jpg').split('/')[-1]
             if picName.startswith('/'):
                 picName = picName[1:]
