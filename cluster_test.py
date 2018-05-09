@@ -10,7 +10,7 @@ def load_label(testsetDir):
     labelDict = {}
     labelCnt = 0
     for dir in os.listdir(testsetDir):
-        if dir.startswith('.'):
+        if dir.startswith('.') or dir.endswith('.txt'):
             continue
         else:
             currentDir = os.path.join(testsetDir, dir)
