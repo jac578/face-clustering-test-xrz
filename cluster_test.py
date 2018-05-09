@@ -22,14 +22,14 @@ def load_label(testsetDir):
                         alone_cluster_label_cnt += 1
     return labelDict
 
-def cluster_and_test_from_video_dir(videoDir, picDir, labelDict, methodList=['DBSCAN']):
+def cluster_and_test_from_video_dir(videoDir, featureList, picDir, methodList=['DBSCAN'], labelDict=None, eps=0.5, nProcess=1):
     if methodList[0] == 'API':
-        methodResultDict = {}
-        methodResultDict['API'] = test_former_api(videoDir)
+        epsResultDict = {}
+        epsResultDict['API'] = test_former_api(videoDir)
     else:    
-        methodResultDict = cluster_from_video_dir(videoDir, picDir, methodList)
-    for method in methodResultDict.keys():
-        resultDict = methodResultDict[method]
+        epsResultDict = cluster_from_video_dir(videoDir, featureList, picDir, methodList, saveResult=False, eps=eps, nProcess=nProcess)
+    for paraEps in epsResultDict.keys():
+        resultDict = epsResultDict[paraEps]
         resultClusterDict = make_clusterDict_from_resultDict(resultDict)
         labelClusterDict = make_clusterDict_from_resultDict(labelDict)
         
@@ -147,6 +147,7 @@ if __name__ == '__main__':
     parser.add_argument('--saveDir', type=str, required=True, help='Path to save clustered pictures')
     parser.add_argument('--eps', type=float, required=False, default=None, help='DBSCAN parameter')
     parser.add_argument('--nProcess', type=int, required=False, default=1, help='Number of processes to read data')
+    parser.add_argument('--evaluate', type=bool, required=False, default=False, help='Do you need evaluation over list of eps?')
     args = vars(parser.parse_args())
 
 
@@ -160,9 +161,16 @@ if __name__ == '__main__':
         eps = str(args['eps'])
 
     saveDir = args['saveDir']+'_'+eps
-    cluster_from_video_dir(args['videoDir'], args['featureList'], args['picDir'], methodList=[args['method']], 
-                            saveResult=args['saveResult'], saveDir=saveDir, eps=args['eps'], nProcess=args['nProcess'])
-
-    print args['eps']
-    os.system("ls -lR {}|grep \"^-\"|wc -l".format(saveDir))
-    os.system("ls {}|wc -l".format(saveDir))
+ 
+    if args['evaluate']:
+        saveDir = args['saveDir']+'_'+eps
+        cluster_and_test_from_video_dir(args['videoDir'], args['featureList'], args['picDir'], methodList=[args['method']], 
+                        eps=args['eps'], nProcess=args['nProcess'])
+    else:
+        cluster_from_video_dir(args['videoDir'], args['featureList'], args['picDir'], methodList=[args['method']], 
+                        saveResult=args['saveResult'], saveDir=saveDir, eps=args['eps'], nProcess=args['nProcess'])
+        print args['eps']
+        os.system("ls -lR {}|grep \"^-\"|wc -l".format(saveDir))
+        os.system("ls {}|wc -l".format(saveDir))
+    
+    

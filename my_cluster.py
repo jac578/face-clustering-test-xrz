@@ -3,6 +3,7 @@ from sklearn import cluster
 from scipy.spatial.distance import cosine as ssd_cosine_dist
 import numpy as np
 import scipy.misc as sc
+import matio
 
 import time
 import os
@@ -33,13 +34,13 @@ def feature_data_reader(dataPath, featureList):
     global_pic = None
     filePathList = read_txtlist(dataPath, featureList)
     #Use first one to initialize
-    feature_list = np.load(filePathList[0])
+    feature_list = matio.load_feat(filePathList[0])
     #Concat else
     cnt = 0
     for fileFullPath in filePathList[1:]:    
         cnt += 1 
         print cnt
-        featureVec = np.load(fileFullPath)
+        featureVec = matio.load_feat(fileFullPath)
         try:
             feature_list = np.vstack((feature_list, featureVec))
         except:
@@ -49,7 +50,7 @@ def feature_data_reader(dataPath, featureList):
 def feature_data_reader_fromList(filePathList):
     name = multiprocessing.current_process().name
     #Use first one to initialize
-    feature_list = np.load(filePathList[0])
+    feature_list = matio.load_feat(filePathList[0])
     print feature_list.shape
     assert feature_list.shape[0] > 0
     #Concat else
@@ -59,7 +60,7 @@ def feature_data_reader_fromList(filePathList):
         fileFullPath = noHeadFilePathList[cnt]
         if cnt%1000 == 0:
             print "Process", name, "done concating", cnt
-        featureVec = np.load(fileFullPath)
+        featureVec = matio.load_feat(fileFullPath)
 
         if len(featureVec.shape)>0:# == 512:
             feature_list = np.vstack((feature_list, featureVec))
@@ -151,20 +152,10 @@ def __compute_pairwise_distance(face_feature_list):
     dist_matrix = 1 - np.dot(face_feature_list, face_feature_list.T)
     return dist_matrix
 
-def my_cluster(videoDir, featureList, picDir, method, saveResult=False, saveDir='result', eps=0.5, nReaderProcess=1, nClusterProcess=1, **kwargs):
-
+def my_cluster(feature_list, filePathList, picDir, method, saveResult=False, saveDir='result', eps=0.5, nProcess=1):
     resultDict = {}
-    t0 = time.time()
-    print "Start loading data: ", t0
-    #feature_list, global_pic, filePathList = feature_data_reader(videoDir, featureList)
-    feature_list, global_pic, filePathList = multiprocess_feature_data_reader(videoDir, featureList, nReaderProcess)
-
-    t1 = time.time()
-    print "Done loading data. Start clustering: ", t1, "Loading data time cost: ", t1 - t0
-
-    my_cluster_after_read(feature_list, filePathList, picDir, method, saveResult, saveDir, eps)
-    
-    return
+    resultDict = my_cluster_after_read(feature_list, filePathList, picDir, method, saveResult, saveDir, eps)
+    return resultDict
 
 def my_cluster_after_read(feature_list, filePathList, picDir, method, saveResult=False, saveDir='result', eps=0.5):
     t1 = time.time()
@@ -191,27 +182,43 @@ def my_cluster_after_read(feature_list, filePathList, picDir, method, saveResult
             try:
                 shutil.copyfile(picPath, classDir+picName)
             except IOError, e:
+                print "something happened like IOError"
                 pass
     t3 = time.time()
     print "Done copying: ", t3, "Copying time cost", t3 - t2
-    # print "Exiting..."
-    # exit(0)
+    
 
-    return
+    assert len(y_pred) == len(filePathList)
+    resultDict = {}
+    for i in range(len(y_pred)):
+        resultDict[filePathList[i].split('/')[-1].replace('.npy', '')] = y_pred[i]#Needs to be customized here
+
+    return resultDict
 
 
 def cluster_from_video_dir(videoDir, featureList, picDir, methodList=['DBSCAN'], saveResult=False, saveDir='result', eps=0.5, nProcess=1):
-    methodResultDict = {}
-    for method in methodList:
+    t0 = time.time()
+    print "Start loading data: ", t0
+    #feature_list, global_pic, filePathList = feature_data_reader(videoDir, featureList)
+    feature_list, global_pic, filePathList = multiprocess_feature_data_reader(videoDir, featureList, nProcess)
+
+    t1 = time.time()
+    print "Done loading data. Start clustering: ", t1, "Loading data time cost: ", t1 - t0
+    
+    method = methodList[0]
+    if type(eps) == int:
+        eps = [eps]
+    epsResultDict = {}
+    for paraEps in eps:
         t0 = time.time()
-        print "method: " + method
+        print "eps: " + paraEps
         print "start time: ", t0
-        # methodResultDict[method] = my_cluster(videoDir, featureList, picDir, method, saveResult, saveDir, eps, nProcess)
-        my_cluster(videoDir, featureList, picDir, method, saveResult, saveDir, eps, nProcess)
+        epsResultDict[paraEps] = my_cluster(feature_list, filePathList, picDir, method, saveResult, saveDir, eps, nProcess)
+        # my_cluster(videoDir, featureList, picDir, method, saveResult, saveDir, eps, nProcess)
         t1 = time.time()
         print "end time: ", t1
         print "time cost: ", t1-t0
-    return methodResultDict
+    return epsResultDict
 
 def download_json(httpLink):
     strHtml = urllib2.urlopen(httpLink).read()
