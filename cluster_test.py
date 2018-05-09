@@ -31,7 +31,7 @@ def cluster_and_test_from_video_dir(videoDir, featureList, picDir, saveResult=Fa
         resultDict = divide_alone_cluster(resultDict)
         resultClusterDict = make_clusterDict_from_resultDict(resultDict)
         labelClusterDict = make_clusterDict_from_resultDict(labelDict)
-        
+        print paraEps
         f_score = pairwise_f_score(resultClusterDict, labelClusterDict, labelDict)
     return 
 
@@ -175,7 +175,7 @@ if __name__ == '__main__':
         print "Will Evaluate"
         labelDict = load_label(args['labelDict'])
         cluster_and_test_from_video_dir(args['videoDir'], args['featureList'], args['picDir'], methodList=[args['method']], 
-                        eps=[0.3, 0.32, 0.33999999999999997, 0.36, 0.38, 0.4, 0.42, 0.44, 0.45999999999999996, 0.48], saveResult=args['saveResult'], saveDir=args['saveDir'], nProcess=args['nProcess'], labelDict=labelDict)
+                        eps=[0.3, 0.32], saveResult=args['saveResult'], saveDir=args['saveDir'], nProcess=args['nProcess'], labelDict=labelDict)
     else:
         print "Will Save Result"
         saveDir = saveDir=args['saveDir'] +'_'+ eps
