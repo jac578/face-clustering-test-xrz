@@ -20,12 +20,12 @@ def load_label(testsetDir):
         labelCnt += 1
     return labelDict
 
-def cluster_and_test_from_video_dir(videoDir, featureList, picDir, methodList=['DBSCAN'], labelDict=None, eps=0.5, nProcess=1):
+def cluster_and_test_from_video_dir(videoDir, featureList, picDir, saveResult=False, saveDir='./result', methodList=['DBSCAN'], labelDict=None, eps=0.5, nProcess=1):
     if methodList[0] == 'API':
         epsResultDict = {}
         epsResultDict['API'] = test_former_api(videoDir)
     else:    
-        epsResultDict = cluster_from_video_dir(videoDir, featureList, picDir, methodList, saveResult=False, eps=eps, nProcess=nProcess)
+        epsResultDict = cluster_from_video_dir(videoDir, featureList, picDir, methodList, saveResult=saveResult, saveDir=saveDir, eps=eps, nProcess=nProcess)
     for paraEps in epsResultDict.keys():
         resultDict = epsResultDict[paraEps]
         resultDict = divide_alone_cluster(resultDict)
@@ -177,7 +177,7 @@ if __name__ == '__main__':
         saveDir = args['saveDir']+'_'+eps
         labelDict = load_label(args['labelDict'])
         cluster_and_test_from_video_dir(args['videoDir'], args['featureList'], args['picDir'], methodList=[args['method']], 
-                        eps=args['eps'], nProcess=args['nProcess'], labelDict=labelDict)
+                        eps=args['eps'], saveResult=args['saveResult'], nProcess=args['nProcess'], labelDict=labelDict)
     else:
         print "Will Save Result"
         cluster_from_video_dir(args['videoDir'], args['featureList'], args['picDir'], methodList=[args['method']], 

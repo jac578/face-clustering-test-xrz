@@ -130,7 +130,7 @@ def cluster_face_features(feature_list, method=None, precomputed=True, eps=0.5):
         if precomputed:
             dist_matrix = -dist_matrix
     elif method == 'DBSCAN':
-        cluster_estimator = cluster.DBSCAN(metric=metric_type, eps=eps, min_samples=2)
+        cluster_estimator = cluster.DBSCAN(metric=metric_type, eps=eps, min_samples=1)
 
     t0 = time.time()
     cluster_estimator.fit(dist_matrix)
@@ -168,6 +168,7 @@ def my_cluster_after_read(feature_list, filePathList, picDir, method, saveResult
 
     if saveResult:
         #saveDirPrefix = 'result_' + method + videoDir.replace('./', '')
+        print "Saving..."
         saveDirPrefix = saveDir
         for i in range(len(y_pred)):
             classDir = saveDirPrefix+'/'+str(y_pred[i])+'/'
@@ -211,6 +212,7 @@ def cluster_from_video_dir(videoDir, featureList, picDir, methodList=['DBSCAN'],
         eps = [eps]
     epsResultDict = {}
     for paraEps in eps:
+        saveDir = saveDir + '_' + str(paraEps)
         t0 = time.time()
         print "eps: " + str(paraEps)
         print "start time: ", t0
