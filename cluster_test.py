@@ -36,7 +36,7 @@ def cluster_and_test_from_video_dir(videoDir, featureList, picDir, methodList=['
         return f_score
 
 def divide_alone_cluster(resultDict):
-    divideCnt = np.amax(dict(resultDict).values) + 1
+    divideCnt = np.amax(dict(resultDict).values()) + 1
     print "divideCnt start at:", divideCnt
     for key in resultDict.keys():
         if resultDict[key] == -1:
