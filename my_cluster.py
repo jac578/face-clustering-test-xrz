@@ -175,7 +175,6 @@ def my_cluster_after_read(feature_list, filePathList, picDir, method, saveResult
             #classDir = saveDirPrefix+'/'+str(y_pred[i])+'/'  #for fomer
             classDir = saveDirPrefix+'/'+str(y_pred[i])+'/'+filePathList[i].replace('.jpg_feat.bin', '.jpg').split('/')[-2] + '/'
             print classDir
-            os.makedirs(classDir)
             try:
                 os.makedirs(classDir)
                 print 'win'
