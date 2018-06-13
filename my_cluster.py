@@ -15,7 +15,6 @@ from parse_json import convert_json_file_to_npy
 
 import multiprocessing
 
-
 FEATURE_DIENSION = 512
 
 def read_txtlist(sourceDir, path):
@@ -27,6 +26,7 @@ def read_txtlist(sourceDir, path):
                 aPath = aPath[1:]
             pathList.append(os.path.join(sourceDir, aPath))
             aPath = f.readline().strip()
+    f.close()
     return pathList
 
 def feature_data_reader(dataPath, featureList):
@@ -39,7 +39,7 @@ def feature_data_reader(dataPath, featureList):
     cnt = 0
     for fileFullPath in filePathList[1:]:    
         cnt += 1 
-        print cnt
+        print 'count=',cnt
         featureVec = matio.load_feat(fileFullPath)
         try:
             feature_list = np.vstack((feature_list, featureVec))
@@ -107,12 +107,10 @@ def multiprocess_feature_data_reader(dataPath, featureList, nProcess=1):
                 filePathList = filePathList + filePathList_part
         return np.asarray(feature_list), global_pic, filePathList 
 
-
 def cluster_face_features(feature_list, method=None, precomputed=True, eps=0.5):
     if feature_list is not None:
         face_feature_list = feature_list
 
-    
     if face_feature_list is None:
         return None
         
@@ -186,7 +184,6 @@ def my_cluster_after_read(feature_list, filePathList, picDir, method, saveResult
     t3 = time.time()
     print "Done copying: ", t3, "Copying time cost", t3 - t2
     
-
     assert len(y_pred) == len(filePathList)
     print y_pred
     resultDict = {}
@@ -196,7 +193,8 @@ def my_cluster_after_read(feature_list, filePathList, picDir, method, saveResult
     return resultDict
 
 
-def cluster_from_video_dir(videoDir, featureList, picDir, methodList=['DBSCAN'], saveResult=False, saveDir='result', eps=0.5, nProcess=1):
+def cluster_from_video_dir(videoDir, featureList, picDir, methodList=['DBSCAN'], 
+                           saveResult=False, saveDir='result', eps=0.5, nProcess=1):
     t0 = time.time()
     print "Start loading data: ", t0
     #feature_list, global_pic, filePathList = feature_data_reader(videoDir, featureList)
@@ -225,6 +223,7 @@ def download_json(httpLink):
     strHtml = urllib2.urlopen(httpLink).read()
     with open('extraSample1.json', 'w') as f:
         f.write(strHtml)
+    f.close()
     return 'extraSample1.json'
 
 def cluster_from_httpLink(httpLink):
